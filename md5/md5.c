@@ -43,55 +43,108 @@ uint32_t T[]={         0xd76aa478, 0xe8c7b756, 0x242070db, 0xc1bdceee,
                        0x6fa87e4f, 0xfe2ce6e0, 0xa3014314, 0x4e0811a1,
                        0xf7537e82, 0xbd3af235, 0x2ad7d2bb, 0xeb86d391
               };
-
+uint32_t AA,BB,CC,DD;
+uint64_t m_len;
 void md5_main(unsigned char *input){
-    uint64_t m_len = 288;
-    unsigned char message[56]={'q','w','e','r','t','y','u','i','o','p','a','s','d','f','g','h','j','k','l','z','x','c','v','b','n','m','1','2','3','4','5','6','7','8','9','0',0x80,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00};
+    m_len = strlen(input);//byte length of the input
     
-    uint32_t X[16];
-    uint8_t i,j;
-    for(i=0;i< (56/4);i++){
-	j = 4*i;
-	X[i] = ((uint32_t)message[j]) | ((uint32_t)message[j+1] << 8) | ((uint32_t)message[j+2] << 16) | ((uint32_t)message[j+3] << 24);
+    uint64_t offset = m_len / 64;
+    uint8_t count = 0,i,j=0;
+    AA = A; BB = B; CC = C; DD = D;
+    while(count < offset){
+	uint32_t X[16];
+        for(i=0;i< (64/4);i++){
+            X[i] = ((uint32_t)input[j]) | ((uint32_t)input[j+1] << 8) | ((uint32_t)input[j+2] << 16) | ((uint32_t)input[j+3] << 24);
+	    j = j+4;
+        }
+	md5_update(X);
+	count++;
     }
-    X[15] = m_len >> 32;
-    X[14] = m_len & (4294967295);
+
+    //padding
+    uint64_t offset2; 
+    offset2 = m_len % 64;
+    uint64_t padding_len = offset2 < 56 ? 56 - offset2 : (56+64) - offset2;
+    md5padding(&input[offset*64],offset2, padding_len);
+    
+
+    //Output
+    AA = ((AA & 0x000000FF) << 24) | ((AA & 0x0000FF00) << 8) | ((AA & 0x00FF0000) >> 8) | ((AA & 0xFF000000) >> 24);
+    BB = ((BB & 0x000000FF) << 24) | ((BB & 0x0000FF00) << 8) | ((BB & 0x00FF0000) >> 8) | ((BB & 0xFF000000) >> 24);
+    CC = ((CC & 0x000000FF) << 24) | ((CC & 0x0000FF00) << 8) | ((CC & 0x00FF0000) >> 8) | ((CC & 0xFF000000) >> 24);
+    DD = ((DD & 0x000000FF) << 24) | ((DD & 0x0000FF00) << 8) | ((DD & 0x00FF0000) >> 8) | ((DD & 0xFF000000) >> 24);
+    printf("\nmessage digest: %2.2x%2.2x%2.2x%2.2x\n",AA,BB,CC,DD);
+
+}
+void md5_update(uint32_t *X){
+    uint8_t i,j;
     printf("\nInput:\n");
     for(uint8_t p =0; p < 16;p++)
-	printf("%2.2x|",X[p]);
+        printf("%2.2x|",X[p]);
     printf("\n\n");
-    uint32_t a=A,b=B,c=C,d=D;
-    //for(i=0;i < N/16 - 1;i++){
-        R1(X, &a, &b, &c, &d);
-        R2(X, &a, &b, &c, &d);
-        R3(X, &a, &b, &c, &d);
-        R4(X, &a, &b, &c, &d);
-        a = A + a;
-        b = B + b;
-        c = C + c;
-        d = D + d;
-    //}
-
-    a = ((a & 0x000000FF) << 24) | ((a & 0x0000FF00) << 8) | ((a & 0x00FF0000) >> 8) | ((a & 0xFF000000) >> 24);
-    b = ((b & 0x000000FF) << 24) | ((b & 0x0000FF00) << 8) | ((b & 0x00FF0000) >> 8) | ((b & 0xFF000000) >> 24);
-    c = ((c & 0x000000FF) << 24) | ((c & 0x0000FF00) << 8) | ((c & 0x00FF0000) >> 8) | ((c & 0xFF000000) >> 24);
-    d = ((d & 0x000000FF) << 24) | ((d & 0x0000FF00) << 8) | ((d & 0x00FF0000) >> 8) | ((d & 0xFF000000) >> 24);
-    printf("\nmessage digest: %2.2x%2.2x%2.2x%2.2x\n",a,b,c,d);
-
+    uint32_t a=AA,b=BB,c=CC,d=DD;
+    for(i = 0; i< 64;i++){
+        switch(i/16){
+	    case 0:
+                R1(X, &a, &b, &c, &d,i);
+		//printf("\nmessage digest: %2.2x|%2.2x|%2.2x|%2.2x\n",a,b,c,d);
+		break;
+	    case 1:
+                R2(X, &a, &b, &c, &d,i);
+		//printf("\nmessage digest: %2.2x|%2.2x|%2.2x|%2.2x\n",a,b,c,d);
+		break;
+	    case 2:
+                R3(X, &a, &b, &c, &d,i);
+		//printf("\nmessage digest: %2.2x|%2.2x|%2.2x|%2.2x\n",a,b,c,d);
+		break;
+	    case 3:
+                R4(X, &a, &b, &c, &d,i);
+		//printf("\nmessage digest: %2.2x|%2.2x|%2.2x|%2.2x\n",a,b,c,d);
+		break;
+	    defailt:
+		printf("ERROR....\n");
+	}
+    }
+    AA = a + AA;
+    BB = b + BB;
+    CC = c + CC;
+    DD = d + DD;
+    //printf("\nmessage digest: %2.2x|%2.2x|%2.2x|%2.2x\n",AA,BB,CC,DD);
+}
+void md5padding(unsigned char *msg,uint64_t offset, uint64_t padding_len){
+    uint8_t i,j=0;
+    uint64_t  len = offset + padding_len;
+    unsigned char message[len];
+    for(i=0;i<len;i++){
+        if(i < offset)
+             message[i] = msg[i];
+        else if(i == offset && padding_len > 0)
+             message[i] = 0x80;
+        else
+             message[i]=0x00;
+    }
+    uint32_t X[16];
+    uint64_t k = len;
+    while(k / 64 > 0){
+	for(i=0;i< (64/4);i++){
+            X[i] = ((uint32_t)message[j]) | ((uint32_t)message[j+1] << 8) | ((uint32_t)message[j+2] << 16) | ((uint32_t)message[j+3] << 24);
+            j = j+4;
+        }
+        md5_update(X);
+	k = k % 64;
+    }
+    for(i=0;i< (56/4);i++){
+        X[i] = ((uint32_t)message[j]) | ((uint32_t)message[j+1] << 8) | ((uint32_t)message[j+2] << 16) | ((uint32_t)message[j+3] << 24);
+	j=j+4;
+    }
+    X[15] = (m_len * 8) >> 32;
+    X[14] = (m_len * 8) & (uint32_t)0xffffffff;
+    md5_update(X);
 }
 
 
-/*uint32_t F(uint32_t b,uint32_t c, uint32_t d){
-    uint32_t f;
-    f = (b&c) | ((~b) & c);
-    return f;
-}*/
-
-void R1(uint32_t *X, uint32_t *a, uint32_t *b, uint32_t *c, uint32_t *d){
+void R1(uint32_t *X, uint32_t *a, uint32_t *b, uint32_t *c, uint32_t *d,uint8_t i){
     uint32_t r;
-    uint8_t i,j;
-
-    for(i = 0;i < 16;i++){
 	r = F(*b, *c, *d) + *a + X[k[i]] + T[i];
 	r = rotate(r, S[i]);
         r = r + *b;
@@ -99,52 +152,37 @@ void R1(uint32_t *X, uint32_t *a, uint32_t *b, uint32_t *c, uint32_t *d){
 	*d = *c;
 	*c = *b;
 	*b = r;
-	
-    }
-}
-void R2(uint32_t *X, uint32_t *a, uint32_t *b, uint32_t *c, uint32_t *d){
-    uint32_t r;
-    uint8_t i,j;
     
-    for(i = 0;i < 16;i++){
-        r = G(*b, *c, *d) + *a + X[k[i+16]] + T[i+16];
-        r = rotate(r, S[i+16]);
-        r = r + *b;
-        *a = *d;
-        *d = *c;
-        *c = *b;
-        *b = r;
-	
-    }   
 }
-void R3(uint32_t *X, uint32_t *a, uint32_t *b, uint32_t *c, uint32_t *d){
+void R2(uint32_t *X, uint32_t *a, uint32_t *b, uint32_t *c, uint32_t *d,uint8_t i){
     uint32_t r;
-    uint8_t i,j;
     
-    for(i = 0;i < 16;i++){
-        r = H(*b, *c, *d) + *a + X[k[i+32]] + T[i+32];
-        r = rotate(r, S[i+32]);
+        r = G(*b, *c, *d) + *a + X[k[i]] + T[i];
+        r = rotate(r, S[i]);
         r = r + *b;
         *a = *d;
         *d = *c;
         *c = *b;
         *b = r;
-
-        
-    }   
 }
-void R4(uint32_t *X, uint32_t *a, uint32_t *b, uint32_t *c, uint32_t *d){
+void R3(uint32_t *X, uint32_t *a, uint32_t *b, uint32_t *c, uint32_t *d,uint8_t i){
     uint32_t r;
-    uint8_t i,j;
-
-    for(i = 0;i < 16;i++){
-        r = I(*b, *c, *d) + *a + X[k[i+48]] + T[i+48];
-        r = rotate(r, S[i+48]);
+        r = H(*b, *c, *d) + *a + X[k[i]] + T[i];
+        r = rotate(r, S[i]);
         r = r + *b;
         *a = *d;
         *d = *c;
         *c = *b;
         *b = r;
-    }   
+}
+void R4(uint32_t *X, uint32_t *a, uint32_t *b, uint32_t *c, uint32_t *d, uint8_t i){
+    uint32_t r;
+        r = I(*b, *c, *d) + *a + X[k[i]] + T[i];
+        r = rotate(r, S[i]);
+        r = r + *b;
+        *a = *d;
+        *d = *c;
+        *c = *b;
+        *b = r;
 }
 
