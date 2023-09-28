@@ -73,7 +73,7 @@ void md5_main(unsigned char *input){
     BB = ((BB & 0x000000FF) << 24) | ((BB & 0x0000FF00) << 8) | ((BB & 0x00FF0000) >> 8) | ((BB & 0xFF000000) >> 24);
     CC = ((CC & 0x000000FF) << 24) | ((CC & 0x0000FF00) << 8) | ((CC & 0x00FF0000) >> 8) | ((CC & 0xFF000000) >> 24);
     DD = ((DD & 0x000000FF) << 24) | ((DD & 0x0000FF00) << 8) | ((DD & 0x00FF0000) >> 8) | ((DD & 0xFF000000) >> 24);
-    printf("\nmessage digest: %2.2x%2.2x%2.2x%2.2x\n",AA,BB,CC,DD);
+    printf("\nmessage digest: %08x%08x%08x%08x\n",AA,BB,CC,DD);
 
 }
 void md5_update(uint32_t *X){
@@ -109,7 +109,7 @@ void md5_update(uint32_t *X){
     BB = b + BB;
     CC = c + CC;
     DD = d + DD;
-    //printf("\nmessage digest: %2.2x|%2.2x|%2.2x|%2.2x\n",AA,BB,CC,DD);
+    //printf("\nmessage digest: %8.2x|%8.2x|%8.2x|%8.2x\n",AA,BB,CC,DD);
 }
 void md5padding(unsigned char *msg,uint64_t offset, uint64_t padding_len){
     uint8_t i,j=0;
