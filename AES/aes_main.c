@@ -15,19 +15,22 @@ int main(){
         for(j=0;j<16;j++)
             printf("%2.2x%c",expandedkey[16*i+j], (j != 15)?' ':'\n');
     }
-    //aes_main(key, plaintext, expandedkey);
+    
     //Encryption
+    printf("\nPlaintext : ");
+    for(i = 0;i < 16;i++)
+        printf("%2.2x",plaintext[i]);
     aes_encrypt(key, plaintext, expandedkey, ciphertext);
     printf("\nciphertext : ");
     for(uint8_t i =0 ;i< 16; i++){
-        printf("%2.2x%c",ciphertext[i], (i != 15)?' ':'\n');
+        printf("%2.2x",ciphertext[i]);
     }
     //Decryption
     aes_decrypt(key, expandedkey, ciphertext, decryptedtext);
     printf("\nDecrypted text : ");
     for(uint8_t i =0 ;i< 16; i++){
-        printf("%2.2x%c",decryptedtext[i], (i != 15)?' ':'\n');
+        printf("%2.2x",decryptedtext[i]);
     }
-
+    printf("\n\n");
     return 0;
 }

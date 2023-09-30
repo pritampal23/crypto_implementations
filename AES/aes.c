@@ -53,17 +53,7 @@ void aes_encrypt(unsigned char *key, unsigned char *plaintext, unsigned char *ex
     for(i= 0;i < 4;i++)
         for(j =0;j < 4;j++)
             state[4*i+j] = plaintext[4*j + i];
-
-
-    printf("\nSecret key : ");
-    for(i = 0;i < 16;i++)
-        printf("%2.2x%c",key[i], (i != 15)?' ':'\n');
-    printf("\nPlaintext : ");
-    for(i = 0;i < 16;i++)
-        printf("%2.2x%c",plaintext[i], (i != 15)?' ':'\n');
-
-
-    //AES Encryption
+    //AES encryption
     aes_encrypt_rounds(state, ciphertext, expandedkey);
     
 }
