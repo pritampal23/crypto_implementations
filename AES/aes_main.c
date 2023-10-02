@@ -2,7 +2,7 @@
 
 int main(){
     unsigned char plaintext[16] = {'a','b','c','d','e','f','1','2','3','4','5','6','7','8','9','0'};
-    unsigned char key[16] = {'k', 'k', 'k', 'k', 'e', 'e', 'e', 'e', 'y', 'y', 'y', 'y', '.', '.', '.', '.'};
+    unsigned char key[16] = {0x2b,0x7e,0x15,0x16,0x28,0xae,0xd2,0xa6,0xab,0xf7,0x15,0x88,0x09,0xcf,0x4f,0x3c};
     unsigned char expandedkey[176];
     unsigned char ciphertext[16];
     unsigned char decryptedtext[16];
@@ -20,13 +20,13 @@ int main(){
     printf("\nPlaintext : ");
     for(i = 0;i < 16;i++)
         printf("%2.2x",plaintext[i]);
-    aes_encrypt(key, plaintext, expandedkey, ciphertext);
+    aes_encrypt(expandedkey, plaintext, ciphertext);
     printf("\nciphertext : ");
     for(uint8_t i =0 ;i< 16; i++){
         printf("%2.2x",ciphertext[i]);
     }
     //Decryption
-    aes_decrypt(key, expandedkey, ciphertext, decryptedtext);
+    aes_decrypt(expandedkey, ciphertext, decryptedtext);
     printf("\nDecrypted text : ");
     for(uint8_t i =0 ;i< 16; i++){
         printf("%2.2x",decryptedtext[i]);

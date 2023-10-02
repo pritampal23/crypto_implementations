@@ -47,7 +47,7 @@ const unsigned char rsbox[256] =
 
 //unsigned char expandedkey[176];
 
-void aes_encrypt(unsigned char *key, unsigned char *plaintext, unsigned char *expandedkey, unsigned char *ciphertext){
+void aes_encrypt(unsigned char *expandedkey, unsigned char *plaintext, unsigned char *ciphertext){
     unsigned char state[16];
     uint8_t i,j;
     for(i= 0;i < 4;i++)
@@ -161,7 +161,7 @@ void Add_roundkey(unsigned char *state, unsigned char *roundkey){
 
 
 // AES decryption
-void aes_decrypt(unsigned char *key, unsigned char *expandedkey, unsigned char *ciphertext, unsigned char *decryptedtext){
+void aes_decrypt(unsigned char *expandedkey, unsigned char *ciphertext, unsigned char *decryptedtext){
     unsigned char state[16];
     uint8_t i,j;
     
