@@ -5,16 +5,18 @@ const uint32_t K[4] = {0x5a827999, 0x6ed9eba1, 0x8f1bbcdc, 0xca62c1d6};
 
 uint32_t h0,h1,h2,h3,h4;
 
-void sha1(unsigned char *message, unsigned char *hash){
-    uint64_t mlen = strlen(message);
+void sha1(unsigned char *message, uint32_t *hash, uint64_t mlen){
+    uint64_t i,j;
+    printf("\nmessage : ");
+    for(i=0; i < mlen;i++)
+        printf("%2.2x ",message[i]);
     uint64_t offset = mlen / 64;
     uint64_t lastblock = mlen % 64;
     uint64_t padding_len = lastblock < 56 ? 56 - lastblock : (56+64) - lastblock;
     uint64_t new_mlen = mlen + padding_len + 8;
     unsigned char padded_message[new_mlen];
-    uint64_t i,j;
     printf("\nMessage Length: %ld",mlen);
-    padding(message, padded_message, padding_len);
+    padding(message, padded_message, mlen, padding_len);
     //Print padded message
     printf("\npadded message : ");
     for(i=0; i < new_mlen;i++)
@@ -32,7 +34,12 @@ void sha1(unsigned char *message, unsigned char *hash){
     for(i = 0; i < new_mlen / 64;i++)
 	sha1_comp(&M[16 * i]);
 
-    printf("\nHash : %08x %08x %08x %08x %08x\n",h0,h1,h2,h3,h4);
+    //printf("\nHash : %08x %08x %08x %08x %08x\n",h0,h1,h2,h3,h4);
+    hash[0] = h0;
+    hash[1] = h1;
+    hash[2] = h2;
+    hash[3] = h3;
+    hash[4] = h4;
 
 }
 
@@ -54,13 +61,12 @@ void sha1_comp(uint32_t *M){
 	    W[i] = RotLeft((W[i-3] ^ W[i-8] ^ W[i-14] ^ W[i-16]), 1);
     }
     //Prepared message schedule
-    printf("\nPrepared message schedule : \n");
+    /*printf("\nPrepared message schedule : \n");
     for(i = 0;i < 80;i++){
         printf("%08x ",W[i]);
 	if(i % 16 == 15 && i > 0)
 	    printf("\n");
-    }
-
+    }*/
     uint32_t a,b,c,d,e;
     uint64_t T;
     a = h0;b = h1;c = h2;d = h3;e = h4;
@@ -88,8 +94,8 @@ void sha1_comp(uint32_t *M){
 	c = RotLeft(b, 30);
 	b = a;
 	a = (uint32_t)(T & 0xffffffff);
-	printf("\nt = %d : ",i);
-	printf("%08x  %08x  %08x  %08x  %08x\n",a,b,c,d,e);
+	//printf("\nt = %d : ",i);
+	//printf("%08x  %08x  %08x  %08x  %08x\n",a,b,c,d,e);
     }
     h0 += a;
     h1 += b;

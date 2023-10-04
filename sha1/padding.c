@@ -1,7 +1,6 @@
 #include "sha1.h"
 
-void padding(unsigned char *message, unsigned char *padded_message, uint64_t padding_len){
-    uint64_t mlen = strlen(message);
+void padding(unsigned char *message, unsigned char *padded_message, uint64_t mlen, uint64_t padding_len){
     uint64_t i,j;
 
     for(i=0;i< mlen;i++)

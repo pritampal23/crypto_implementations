@@ -16,8 +16,13 @@
 #define Parity(x,y,z) ((x) ^ (y) ^ (z))
 #define Maj(x,y,z) (((x) & (y)) ^ ((x) & (z)) ^ ((y) & (z)))
 
-void sha1(unsigned char *message, unsigned char *hash);
-void padding(unsigned char *message, unsigned char *padded_message, uint64_t padding_len);
+void sha1(unsigned char *message, uint32_t *hash, uint64_t mlen);
+void padding(unsigned char *message, unsigned char *padded_message, uint64_t mlen, uint64_t padding_len);
 void parsing(uint32_t *M, unsigned char *padded_message, uint64_t mlen);
 void sha1_comp(uint32_t *M);
 uint32_t RotLeft(uint32_t w, uint8_t n);
+
+
+
+//HMAC Implementation
+void hmac_main(unsigned char *text, uint32_t *hmac);
