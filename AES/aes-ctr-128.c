@@ -22,7 +22,7 @@ void aes_ctr_128(unsigned char *plaintext){
     uint64_t offset = mlen / 16;
     unsigned char ciphertext[16 * (offset+1)];
     unsigned char InputBlock[16];
-    unsigned char OutputBlock[16 * (offset +1)];
+    unsigned char OutputBlock[16];
     uint8_t i=0,j,k=0;
 
 
@@ -34,19 +34,20 @@ void aes_ctr_128(unsigned char *plaintext){
     }
     for(i=0;i<16;i++)
 	InputBlock[i] = InitCtrBlock[i];
-    
+    //Encryption
+    printf("\nEncryption\n");
     while(k < offset){
 	//Print Input Block
         printf("\nInput block %d : ", k+1);
         for(i = 0;i < 16;i++)
             printf("%2.2x",InputBlock[i]);
-	aes_encrypt(expandedkey, InputBlock, &OutputBlock[16 * k]);
+	aes_encrypt(expandedkey, InputBlock, OutputBlock);
 	//Print Output Block
         printf("\nOutput block %d : ", k+1);
         for(i = 0;i < 16;i++)
-            printf("%2.2x",OutputBlock[16 * k + i]);
+            printf("%2.2x",OutputBlock[i]);
         //Ciphertext
-	XOR(&OutputBlock[16 * k], &plaintext[16 * k], &ciphertext[16 * k]);
+	XOR(OutputBlock, &plaintext[16 * k], &ciphertext[16 * k]);
         printf("\nCiphertext %d : ", k+1);
         for(i =0 ;i< 16; i++){
             printf("%2.2x",ciphertext[16 * k + i]);
@@ -57,22 +58,49 @@ void aes_ctr_128(unsigned char *plaintext){
     //padding
     uint64_t last_block_size = mlen % 16;
     uint64_t padding_len = 16 - last_block_size;
-    padding(&plaintext[16 * offset], padding_len, );
+    unsigned char padded_message[16];
+    padding(&plaintext[16 * offset], padding_len, padded_message);
     
     //Print Input Block
     printf("\nInput block %d : ", k+1);
     for(i = 0;i < 16;i++)
         printf("%2.2x",InputBlock[i]);
-    aes_encrypt(expandedkey, InputBlock, &OutputBlock[16 * k]);
+    aes_encrypt(expandedkey, InputBlock, OutputBlock);
     //Print Output Block
     printf("\nOutput block %d : ", k+1);
     for(i = 0;i < 16;i++)
-        printf("%2.2x",OutputBlock[16 * k + i]);
+        printf("%2.2x",OutputBlock[i]);
     //Ciphertext
-    XOR(&OutputBlock[16 * k], &plaintext[16 * k], &ciphertext[16 * k]);
+    XOR(OutputBlock, padded_message, &ciphertext[16 * k]);
     printf("\nCiphertext %d : ", k+1);
     for(i =0 ;i< 16; i++){
         printf("%2.2x",ciphertext[16 * k + i]);
+    }
+    
+    //Decryption
+    printf("\n\nDecryption\n");
+    k=0;
+    unsigned char decryptedtext[16 * (offset+1)];
+    for(i=0;i<16;i++)
+        InputBlock[i] = InitCtrBlock[i];
+    while(k <= offset){
+        //Print Input Block
+        printf("\nInput block %d : ", k+1);
+        for(i = 0;i < 16;i++)
+            printf("%2.2x",InputBlock[i]);
+        aes_encrypt(expandedkey, InputBlock, OutputBlock);
+        //Print Output Block
+        printf("\nOutput block %d : ", k+1);
+        for(i = 0;i < 16;i++)
+	    printf("%2.2x",OutputBlock[i]);	
+	//Plaintext
+	XOR(OutputBlock,&ciphertext[16*k], &decryptedtext[16 * k]);
+        printf("\nPlaintext %d : ", k+1);
+        for(i =0 ;i< 16; i++){
+            printf("%2.2x",decryptedtext[16 * k + i]);
+        }
+        increment(InputBlock);
+	k++;
     }
 
     printf("\n\n");    
