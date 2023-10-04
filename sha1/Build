@@ -1,0 +1,21 @@
+#To build executable file for SHA1 implementation
+	
+	make SHA1
+	./sha1 text
+
+#To build executable file for HMAC implementation using SHA1
+	
+	make HMAC
+	./hmac text
+
+#To clean *.o and executable files
+
+	make CLEAN
+
+#Online Materials for SHA1 implementation
+
+	https://csrc.nist.gov/files/pubs/fips/180-2/final/docs/fips180-2.pdf
+
+#Online Materials for HMAC implementation
+
+	http://www.cs.haifa.ac.il/~orrd/IntroToCrypto/online/fips-198a.pdf
