@@ -6,4 +6,5 @@
 #To clean the executables
 	make CLEAN
 
-
+#Online material for md5 implementation
+	https://www.rfc-editor.org/pdfrfc/rfc1321.txt.pdf
