@@ -1,0 +1,9 @@
+#To build the executable file for md5 implementation
+
+	make MD5
+	./md5 text
+
+#To clean the executables
+	make CLEAN
+
+
