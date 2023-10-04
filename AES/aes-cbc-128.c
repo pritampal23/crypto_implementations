@@ -32,6 +32,7 @@ void aes_cbc_128(unsigned char *plaintext){
     }
 
     //Encryption
+    printf("\nENRYPTION\n");
     while(k < offset){
 	for(j = 0; j < 16; j++)
 	    block_message[j] = plaintext[16 * k + j];
@@ -59,7 +60,7 @@ void aes_cbc_128(unsigned char *plaintext){
     uint64_t padding_len = 16 - last_block_size;
     padding(&plaintext[16 * offset], padding_len, block_message);
     XOR(block_message, round_iv, block_message);
-
+    
     //Print Input Block
     printf("\nInput block %d : ", k+1);
     for(i = 0;i < 16;i++)
@@ -73,6 +74,7 @@ void aes_cbc_128(unsigned char *plaintext){
 
     printf("\n\n");
     //Decryption
+    printf("\nDECRYPTION\n");
     k=0;
     for(i=0; i < 16;i++)
 	round_iv[i] = IV[i];
@@ -94,7 +96,6 @@ void aes_cbc_128(unsigned char *plaintext){
 
         k++;
     }
-
     printf("\n\n");
 }
 
