@@ -16,7 +16,7 @@ void sha1(unsigned char *message, uint32_t *hash, uint64_t mlen){
     uint64_t new_mlen = mlen + padding_len + 8;
     unsigned char padded_message[new_mlen];
     printf("\nMessage Length: %ld",mlen);
-    padding(message, padded_message, mlen, padding_len);
+    sha1_padding(message, padded_message, mlen, padding_len);
     //Print padded message
     printf("\npadded message : ");
     for(i=0; i < new_mlen;i++)
