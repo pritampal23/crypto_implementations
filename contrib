@@ -1,0 +1,15 @@
+#Online material for AES encryption
+        https://nvlpubs.nist.gov/nistpubs/fips/nist.fips.197.pdf
+        https://nvlpubs.nist.gov/nistpubs/legacy/sp/nistspecialpublication800-38a.pdf
+
+#Online Materials for SHA1 implementation
+
+        https://csrc.nist.gov/files/pubs/fips/180-2/final/docs/fips180-2.pdf
+
+#Online Materials for HMAC implementation
+
+        http://www.cs.haifa.ac.il/~orrd/IntroToCrypto/online/fips-198a.pdf
+
+#Online material for md5 implementation
+	https://www.rfc-editor.org/pdfrfc/rfc1321.txt.pdf
+
