@@ -58,7 +58,7 @@ void aes_cbc_128(unsigned char *plaintext){
     //padding
     uint64_t last_block_size = mlen % 16;
     uint64_t padding_len = 16 - last_block_size;
-    padding(&plaintext[16 * offset], padding_len, block_message);
+    aes_padding(&plaintext[16 * offset], padding_len, block_message);
     XOR(block_message, round_iv, block_message);
     
     //Print Input Block

@@ -7,12 +7,15 @@
 
 	make AES-CBC-128
 	./aes-cbc-128.out
+	
 #To build executable for aes-ctr-128 encryption
 
 	make AES-CTR-128
 	./aes-ctr-128.out
+	
 #TO clean the executables
 	make CLEAN
+	
 #Online material for AES encryption
 	https://nvlpubs.nist.gov/nistpubs/fips/nist.fips.197.pdf
 	https://nvlpubs.nist.gov/nistpubs/legacy/sp/nistspecialpublication800-38a.pdf

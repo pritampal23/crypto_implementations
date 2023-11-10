@@ -59,7 +59,7 @@ void aes_ctr_128(unsigned char *plaintext){
     uint64_t last_block_size = mlen % 16;
     uint64_t padding_len = 16 - last_block_size;
     unsigned char padded_message[16];
-    padding(&plaintext[16 * offset], padding_len, padded_message);
+    aes_padding(&plaintext[16 * offset], padding_len, padded_message);
     
     //Print Input Block
     printf("\nInput block %d : ", k+1);

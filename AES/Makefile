@@ -12,19 +12,19 @@ KeyExpansion.o: KeyExpansion.c
 	$(CC) $(CFLAGS) KeyExpansion.c
 
 #AES-CBC-128 basic implementation
-AES-CBC-128: aes-cbc-128.o aes.o KeyExpansion.o XOR.o padding.o
-	$(CC) aes-cbc-128.o aes.o KeyExpansion.o XOR.o padding.o -o aes-cbc-128.out
+AES-CBC-128: aes-cbc-128.o aes.o KeyExpansion.o XOR.o aes_padding.o
+	$(CC) aes-cbc-128.o aes.o KeyExpansion.o XOR.o aes_padding.o -o aes-cbc-128.out
 aes-cbc-128.o: aes-cbc-128.c
 	$(CC) $(CFLAGS) aes-cbc-128.c
 XOR.o: XOR.c
 	$(CC) $(CFLAGS) XOR.c
-padding.o: padding.c
-	$(CC) $(CFLAGS) padding.c
+aes_padding.o: aes_padding.c
+	$(CC) $(CFLAGS) aes_padding.c
 
 #AES-CTR-128 basic implementation
 
-AES-CTR-128: aes-ctr-128.o aes.o KeyExpansion.o XOR.o padding.o
-	$(CC) aes-ctr-128.o aes.o KeyExpansion.o XOR.o padding.o -o aes-ctr-128.out
+AES-CTR-128: aes-ctr-128.o aes.o KeyExpansion.o XOR.o aes_padding.o
+	$(CC) aes-ctr-128.o aes.o KeyExpansion.o XOR.o aes_padding.o -o aes-ctr-128.out
 aes-ctr-128.o: aes-ctr-128.c
 	$(CC) $(CFLAGS) aes-ctr-128.c
 

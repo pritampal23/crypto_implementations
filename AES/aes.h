@@ -32,5 +32,5 @@ void invret_column(unsigned char *column);
 
 void XOR(unsigned char *A, unsigned char *B, unsigned char *C);
 void print(unsigned char *input);
-void padding(unsigned char *plaintext,uint64_t padding_len, unsigned char *block_message);
+void aes_padding(unsigned char *plaintext,uint64_t padding_len, unsigned char *block_message);
 
