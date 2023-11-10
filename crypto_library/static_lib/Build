@@ -1,0 +1,31 @@
+#To build the excutables for aes-128 for 128 bit message
+
+	gcc -o aes_128.out aes_main.o -L. -lcrypto
+	./aes_128.out
+
+#To build the executables for AES-CBC-128
+
+	gcc -o aes-cbc.out aes-cbc-128.o -L. -lcrypto
+	./aes-cbc.out
+
+#To build the executables for AES-CTR-128
+
+        gcc -o aes-ctr.out aes-ctr-128.o -L. -lcrypto
+        ./aes-ctr.out
+
+#To build the executables for MD5
+
+	gcc -o md5.out md5_input.o -L. -lcrypto
+	./md5.out text
+
+#To build the executables for SHA1
+	
+	gcc -o sha1.out sha1_input.o -L. -lcrypto
+	./sha1.out text
+
+#To build the executables for HMAC
+
+	gcc -o hmac.out hmac_text.o -L. -lcrypto
+	./hmac.out
+
+
